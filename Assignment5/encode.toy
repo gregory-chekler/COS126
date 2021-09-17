@@ -1,0 +1,36 @@
+/******************************************************************************
+ *  Description: This TOY program encodes a 4 bit binary message
+                 by adding three bits to the end that check for even parity
+                 that can be used to check if the message was sent correctly.
+
+
+% java-introcs TOY encode.toy
+ *  Input: 4 bit binary message
+ *  Output: seven bit binary message with 3 parity bits at the end
+ ******************************************************************************/
+10: 81FF   read R[1]                     int m1 = StdIn.readInt();
+
+11: D116   if (R[1] > 0) goto 16         if (m1 == 0xFFFF) break;
+12: C116   if (R[1] == 0) goto 16
+13: 0000   halt
+
+16: 82FF   read R[2]                     int m2 = StdIn.readInt();
+17: 83FF   read R[3]                     int m3 = StdIn.readInt();
+18: 84FF   read R[4]                     int m4 = StdIn.readInt();
+
+19: 4512   R[5] <- R[1] ^ R[2]           int p1 = m1 ^ m2;
+1A: 4554   R[5] <- R[5] ^ R[4]           p1 = p1 ^ m4;
+1B: 4613   R[6] <- R[1] ^ R[3]           int p2 = m1 ^ m3;
+1C: 4664   R[6] <- R[6] ^ R[4]           p2 = p2 ^ m4;
+1D: 4723   R[7] <- R[2] ^ R[3]           int p3 = m2 ^ m3;
+1E: 4774   R[7] <- R[7] ^ R[4]           p3 = p3 ^ m4;
+
+1F: 91FF   write R[1]                    StdOut.println(m1);
+20: 92FF   write R[2]                    StdOut.println(m2);
+21: 93FF   write R[3]                    StdOut.println(m3);
+22: 94FF   write R[4]                    StdOut.println(m4);
+23: 95FF   write R[5]                    StdOut.println(p1);
+24: 96FF   write R[6]                    StdOut.println(p2);
+25: 97FF   write R[7]                    StdOut.println(p3);
+26: 81FF   read R[1]                     //if end of file, halt
+27: C011   goto 11
